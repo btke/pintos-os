@@ -1,0 +1,23 @@
+diff --git a/pintos/src/filesys/inode.c b/pintos/src/filesys/inode.c
+index 0d359d4..b334c27 100644
+--- a/pintos/src/filesys/inode.c
++++ b/pintos/src/filesys/inode.c
+@@ -49,9 +49,6 @@ struct inode
+     int open_cnt;                       /* Number of openers. */
+     bool removed;                       /* True if deleted, false otherwise. */
+     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
+-    /* TASK 2 -- COMMENTED OUT */
+-    // struct inode_disk data;             /* Inode content. */
+-    /* END TASK 2 */
+   };
+ 
+ /* Returns the block device sector that contains byte offset POS
+@@ -64,7 +61,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
+   ASSERT (inode != NULL);
+   block_sector_t sector = -1;
+   struct inode_disk *metadata = malloc(BLOCK_SECTOR_SIZE);
+-  cache_read(fs_device, inode->sector, (void *)metadata, 0, BLOCK_SECTOR_SIZE);
++  cache_read(fs_device, inode_get_inumber(inode), (void *)metadata, 0, BLOCK_SECTOR_SIZE);
+ 
+   if (pos < metadata->length)
+     {
